@@ -18,7 +18,8 @@ lex: $(XOBJ)
 	$(CC) $(LDFLAGS) $(XOBJ) $(LIBS) -o lex
 
 libl.a: $(LOBJ)
-	$(AR) -rv libl.a $(LOBJ)
+	rm -f $@
+	$(AR) cru $@ $(LOBJ)
 	$(RANLIB) $@
 
 allprint_w.o: allprint.c
