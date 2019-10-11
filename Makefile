@@ -8,6 +8,8 @@ EFLAGS = -DEUC -DJLSLEX -DEOPTION
 
 LEXDIR = $(LIBDIR)/lex
 
+RANLIB = ranlib
+
 .c.o: ; $(CC) -c $(CFLAGS) $(CPPFLAGS) $(WARN) -DFORMPATH='"$(LEXDIR)"' $<
 
 all: lex libl.a
