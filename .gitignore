@@ -1,3 +1,9 @@
 lex
+form2hdr
 *.o
 *.a
+n*form.h
+GPATH
+GRTAGS
+GTAGS
+
