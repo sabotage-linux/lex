@@ -41,6 +41,7 @@
  */
 
 void yyerror(char *);
+extern int  yylex(void);
 
 #include <ctype.h>
 #include <wchar.h>
