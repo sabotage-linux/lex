@@ -65,3 +65,5 @@ sub3.o: sub3.c ldefs.c search.h
 yyless.o: yyless.c
 yywrap.o: yywrap.c
 lsearch.o: search.h
+
+.PHONY: all clean mrproper install
