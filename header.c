@@ -2,9 +2,8 @@
  * CDDL HEADER START
  *
  * The contents of this file are subject to the terms of the
- * Common Development and Distribution License, Version 1.0 only
- * (the "License").  You may not use this file except in compliance
- * with the License.
+ * Common Development and Distribution License (the "License").
+ * You may not use this file except in compliance with the License.
  *
  * You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE
  * or http://www.opensolaris.org/os/licensing.
@@ -398,9 +397,9 @@ statistics(void)
 {
 	fprintf(errorf,
 "%d/%d nodes(%%e), %d/%d positions(%%p), %d/%d (%%n), %ld transitions,\n",
-	tptr, treesize, nxtpos-positions, maxpos, stnum + 1, nstates, rcount);
+	tptr, treesize, (int)(nxtpos-positions), maxpos, stnum + 1, nstates, rcount);
 	fprintf(errorf,
-	"%d/%d packed char classes(%%k), ", pcptr-pchar, pchlen);
+	"%d/%d packed char classes(%%k), ", (int)(pcptr-pchar), pchlen);
 	if (optim)
 		fprintf(errorf,
 		" %d/%d packed transitions(%%a), ", nptr, ntrans);
