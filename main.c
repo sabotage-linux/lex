@@ -43,6 +43,10 @@
 #include <limits.h>
 #include <unistd.h>
 
+#include "nceucform.h"
+#include "ncform.h"
+#include "nrform.h"
+
 static wchar_t  L_INITIAL[] = {'I', 'N', 'I', 'T', 'I', 'A', 'L', 0};
 
 static void get1core(void);
@@ -59,17 +63,17 @@ main(int argc, char **argv)
 {
 	int i;
 	int c;
-	char *path = NULL;
 	Boolean eoption = 0, woption = 0;
+	const char *driver = 0;
 
 	sargv = argv;
 	sargc = argc;
 	errorf = stderr;
 	setlocale(LC_CTYPE, "");
 #ifdef DEBUG
-	while ((c = getopt(argc, argv, "dyctvnewVQ:Y:")) != EOF) {
+	while ((c = getopt(argc, argv, "dyctvnewVQ:")) != EOF) {
 #else
-	while ((c = getopt(argc, argv, "ctvnewVQ:Y:")) != EOF) {
+	while ((c = getopt(argc, argv, "ctvnewVQ:")) != EOF) {
 #endif
 		switch (c) {
 #ifdef DEBUG
@@ -88,11 +92,6 @@ main(int argc, char **argv)
 				if (*v_stmp != 'y' && *v_stmp != 'n')
 					error(
 					"lex: -Q should be followed by [y/n]");
-				break;
-			case 'Y':
-				path = malloc(strlen(optarg) +
-				    sizeof ("/nceucform") + 1);
-				path = strcpy(path, optarg);
 				break;
 			case 'c':
 				ratfor = FALSE;
@@ -120,7 +119,7 @@ main(int argc, char **argv)
 				break;
 			default:
 				fprintf(stderr,
-				"Usage: lex [-ewctvnVY] [-Q(y/n)] [file]\n");
+				"Usage: lex [-ewctvnV] [-Q(y/n)] [file]\n");
 				exit(1);
 		}
 	}
@@ -224,25 +223,15 @@ main(int argc, char **argv)
 #ifdef DEBUG
 	free3core();
 #endif
-	if (path == NULL) {
-		static char formpath[sizeof FORMPATH + 20] = FORMPATH;
-		path = formpath;
-	}
-
 	if (handleeuc) {
 		if (ratfor)
 			error("Ratfor is not supported by -w or -e option.");
-		strcat(path, "/nceucform");
+		driver = nceucform;
 	}
 	else
-		strcat(path, ratfor ? "/nrform" : "/ncform");
+		driver = ratfor ? nrform : ncform;
 
-	fother = fopen(path, "r");
-	if (fother == NULL)
-		error("Lex driver missing, file %s", path);
-	while ((i = getc(fother)) != EOF)
-		putc(i, fout);
-	fclose(fother);
+	fprintf(fout, "%s", driver);
 	fclose(fout);
 	if (report == 1)
 		statistics();

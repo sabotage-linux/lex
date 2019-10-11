@@ -199,9 +199,8 @@ extern int funcflag;
 extern int pflag;
 extern int casecount;
 extern int chset;	/* 1 = CHR set modified */
-extern FILE *fin, *fout, *fother, *errorf;
+extern FILE *fin, *fout, *errorf;
 extern int fptr;
-extern char *ratname, *cname;
 extern int prev;	/* previous input character */
 extern int pres;	/* present input character */
 extern int peek;	/* next input character */

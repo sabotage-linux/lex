@@ -3,16 +3,28 @@ XOBJ = main.o sub1.o sub2.o sub3.o header.o wcio.o parser.o getopt.o lsearch.o
 LOBJ = allprint.o libmain.o reject.o yyless.o yywrap.o \
 	allprint_w.o reject_w.o yyless_w.o reject_e.o yyless_e.o
 
+GENH = nceucform.h ncform.h nrform.h
+
 WFLAGS = -DEUC -DJLSLEX -DWOPTION
 EFLAGS = -DEUC -DJLSLEX -DEOPTION
 
-LEXDIR = $(LIBDIR)/lex
-
 RANLIB = ranlib
 
-.c.o: ; $(CC) -c $(CFLAGS) $(CPPFLAGS) $(WARN) -DFORMPATH='"$(LEXDIR)"' $<
+HOSTCC = $(CC)
+
+.c.o: ; $(CC) -c $(CFLAGS) $(CPPFLAGS) $(WARN) $<
 
 all: lex libl.a
+
+form2hdr: form2hdr.c
+	$(HOSTCC) $(HOSTCFLAGS) form2hdr.c -o $@
+
+nceucform.h: nceucform
+	./form2hdr $< > $@
+ncform.h: ncform
+	./form2hdr $< > $@
+nrform.h: nrform
+	./form2hdr $< > $@
 
 lex: $(XOBJ)
 	$(CC) $(LDFLAGS) $(XOBJ) $(LIBS) -o lex
@@ -39,18 +51,14 @@ yyless_e.o: yyless.c
 
 install: all
 	test -d $(ROOT)$(BINDIR) || mkdir -p $(ROOT)$(BINDIR)
-	test -d $(ROOT)$(LEXDIR) || mkdir -p $(ROOT)$(LEXDIR)
 	$(INSTALL) -c -m 755 lex $(ROOT)$(BINDIR)/lex
 	$(STRIP) $(ROOT)$(BINDIR)/lex
-	$(INSTALL) -c -m 644 ncform $(ROOT)$(LEXDIR)/ncform
-	$(INSTALL) -c -m 644 nceucform $(ROOT)$(LEXDIR)/nceucform
-	$(INSTALL) -c -m 644 nrform $(ROOT)$(LEXDIR)/nrform
 	$(INSTALL) -c -m 644 libl.a $(ROOT)$(LIBDIR)/libl.a
 	test -d $(ROOT)$(MANDIR)/man1 || mkdir -p $(ROOT)$(MANDIR)/man1
 	$(INSTALL) -c -m 644 lex.1 $(ROOT)$(MANDIR)/man1/lex.1
 
 clean:
-	rm -f lex libl.a $(XOBJ) $(LOBJ) parser.c core log *~
+	rm -f lex libl.a $(XOBJ) $(LOBJ) $(GENH) parser.c form2hdr core log *~
 
 mrproper: clean
 
@@ -58,7 +66,7 @@ allprint.o: allprint.c
 header.o: header.c ldefs.c
 ldefs.o: ldefs.c
 libmain.o: libmain.c
-main.o: main.c once.h ldefs.c sgs.h
+main.o: main.c once.h ldefs.c sgs.h nceucform.h ncform.h nrform.h
 reject.o: reject.c
 sub1.o: sub1.c ldefs.c
 sub2.o: sub2.c ldefs.c
@@ -66,5 +74,8 @@ sub3.o: sub3.c ldefs.c search.h
 yyless.o: yyless.c
 yywrap.o: yywrap.c
 lsearch.o: search.h
+nceucform.h: form2hdr
+ncform.h: form2hdr
+nrform.h: form2hdr
 
 .PHONY: all clean mrproper install

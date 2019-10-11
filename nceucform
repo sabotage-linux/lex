@@ -37,6 +37,7 @@
  * Sccsid @(#)nceucform	1.6 (gritter) 11/18/05
  */
 
+/* START_INCLUDE */
 #if defined(__cplusplus) || defined(__STDC__)
 int yycgid(wchar_t);
 wint_t yygetwchar(void);

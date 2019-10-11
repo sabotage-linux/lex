@@ -41,7 +41,6 @@ lex \- generator of lexical analysis programs
 .ad l
 .nh
 \fBlex\fR [\fB\-ctvnVew\fR] [\fB\-Q\fR(\fBy\fR|\fBn\fR)]
-[\fB\-Y\ \fIdirectory\fR]
 [\fIfiles\fR\ ...]
 .br
 .ad b
@@ -118,11 +117,6 @@ to be printed.
 .B \-w
 Generates output that can handle multibyte characters,
 with \fIyytext[]\fR being of type \fIwchar_t[]\fR.
-This option is an extension.
-.TP
-\fB\-Y \fIdirectory\fR
-Use `\fIdirectory\fR' to locate driver files,
-instead of the default `/usr/ccs/lib/lex'.
 This option is an extension.
 .SH "SEE ALSO"
 yacc(1)

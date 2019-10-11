@@ -30,7 +30,7 @@
 #
 # Sccsid @(#)nrform	1.4 (gritter) 10/20/06
 #
-
+# START_INCLUDE
 block data
 integer cshift, csize, yynlin
 common /yyllib/ cshift, csize, yynlin

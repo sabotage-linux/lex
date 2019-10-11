@@ -79,15 +79,6 @@ int	peek = '\n';	/* next input character */
 CHR	*pushptr = pushc;
 CHR	*slptr = slist;
 
-#ifndef CNAME
-#define	CNAME "./ncform"
-#endif
-#ifndef RATNAME
-#define	RATNAME "./nrform"
-#endif
-char	*cname = CNAME;
-char	*ratname = RATNAME;
-
 int ccount = 1;
 int casecount = 1;
 int aptr = 1;
@@ -116,7 +107,7 @@ int divflg;
 int funcflag;
 int pflag;
 int chset;	/* 1 = char set modified */
-FILE *fin, *fother;
+FILE *fin;
 int fptr;
 int *name;
 intptr_t *left;
