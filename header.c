@@ -65,61 +65,67 @@ chd1(void)
 static const char yylexid[] USED = \"lex: %s\"\n", rel);
 	}
 	if (handleeuc) {
-		fprintf(fout, "#ifndef EUC\n");
-		fprintf(fout, "#define EUC\n");
-		fprintf(fout, "#endif\n");
-		fprintf(fout, "#include <stdio.h>\n");
-		fprintf(fout, "#include <stdlib.h>\n");
-		fprintf(fout, "#ifdef	__sun\n");
-		fprintf(fout, "#include <widec.h>\n");
-		fprintf(fout, "#else	/* !__sun */\n");
-		fprintf(fout, "#include <wchar.h>\n");
-		fprintf(fout, "#endif	/* !__sun */\n");
+		fprintf(fout,
+			"#ifndef EUC\n"
+			"#define EUC\n"
+			"#endif\n"
+			"#include <stdio.h>\n"
+			"#include <stdlib.h>\n"
+			"#ifdef	__sun\n"
+			"#include <widec.h>\n"
+			"#else	/* !__sun */\n"
+			"#include <wchar.h>\n"
+			"#endif	/* !__sun */\n");
 		if (widecio) { /* -w option */
-			fprintf(fout, "#define YYTEXT yytext\n");
-			fprintf(fout, "#define YYLENG yyleng\n");
-			fprintf(fout, "#ifndef __cplusplus\n");
-			fprintf(fout, "#define YYINPUT input\n");
-			fprintf(fout, "#define YYOUTPUT output\n");
-			fprintf(fout, "#else\n");
-			fprintf(fout, "#define YYINPUT lex_input\n");
-			fprintf(fout, "#define YYOUTPUT lex_output\n");
-			fprintf(fout, "#endif\n");
-			fprintf(fout, "#define YYUNPUT unput\n");
+			fprintf(fout,
+				"#define YYTEXT yytext\n"
+				"#define YYLENG yyleng\n"
+				"#ifndef __cplusplus\n"
+				"#define YYINPUT input\n"
+				"#define YYOUTPUT output\n"
+				"#else\n"
+				"#define YYINPUT lex_input\n"
+				"#define YYOUTPUT lex_output\n"
+				"#endif\n"
+				"#define YYUNPUT unput\n");
 		} else { /* -e option */
-			fprintf(fout, "#include <limits.h>\n");
-			fprintf(fout, "#ifdef	__sun\n");
-			fprintf(fout, "#include <sys/euc.h>\n");
-			fprintf(fout, "#endif	/* __sun */\n");
-			fprintf(fout, "#define YYLEX_E 1\n");
-			fprintf(fout, "#define YYTEXT yywtext\n");
-			fprintf(fout, "#define YYLENG yywleng\n");
-			fprintf(fout, "#define YYINPUT yywinput\n");
-			fprintf(fout, "#define YYOUTPUT yywoutput\n");
-			fprintf(fout, "#define YYUNPUT yywunput\n");
+			fprintf(fout,
+				"#include <limits.h>\n"
+				"#ifdef	__sun\n"
+				"#include <sys/euc.h>\n"
+				"#endif	/* __sun */\n"
+				"#define YYLEX_E 1\n"
+				"#define YYTEXT yywtext\n"
+				"#define YYLENG yywleng\n"
+				"#define YYINPUT yywinput\n"
+				"#define YYOUTPUT yywoutput\n"
+				"#define YYUNPUT yywunput\n");
 		}
 	} else { /* ASCII compatibility mode. */
-		fprintf(fout, "#include <stdio.h>\n");
-		fprintf(fout, "#include <stdlib.h>\n");
+		fprintf(fout,
+			"#include <stdio.h>\n"
+			"#include <stdlib.h>\n");
 	}
 	if (ZCH > NCH)
 		fprintf(fout, "# define U(x) ((x)&0377)\n");
 	else
-	fprintf(fout, "# define U(x) x\n");
-	fprintf(fout, "# define NLSTATE yyprevious=YYNEWLINE\n");
-	fprintf(fout, "# define BEGIN yybgin = yysvec + 1 +\n");
-	fprintf(fout, "# define INITIAL 0\n");
-	fprintf(fout, "# define YYLERR yysvec\n");
-	fprintf(fout, "# define YYSTATE (yyestate-yysvec-1)\n");
+	fprintf(fout,
+		"# define U(x) x\n"
+		"# define NLSTATE yyprevious=YYNEWLINE\n"
+		"# define BEGIN yybgin = yysvec + 1 +\n"
+		"# define INITIAL 0\n"
+		"# define YYLERR yysvec\n"
+		"# define YYSTATE (yyestate-yysvec-1)\n");
 	if (optim)
 		fprintf(fout, "# define YYOPTIM 1\n");
 #ifdef DEBUG
 	fprintf(fout, "# define LEXDEBUG 1\n");
 #endif
-	fprintf(fout, "# ifndef YYLMAX \n");
-	fprintf(fout, "# define YYLMAX BUFSIZ\n");
-	fprintf(fout, "# endif \n");
-	fprintf(fout, "#ifndef __cplusplus\n");
+	fprintf(fout,
+		"# ifndef YYLMAX \n"
+		"# define YYLMAX BUFSIZ\n"
+		"# endif \n"
+		"#ifndef __cplusplus\n");
 	if (widecio)
 		fprintf(fout, "# define output(c) (void)putwc(c,yyout)\n");
 	else
@@ -129,71 +135,70 @@ static const char yylexid[] USED = \"lex: %s\"\n", rel);
 		fprintf(fout, "# define lex_output(c) (void)putwc(c,yyout)\n");
 	else
 		fprintf(fout, "# define lex_output(c) (void)putc(c,yyout)\n");
-	fprintf(fout, "#endif\n");
-	fprintf(fout, "\n#if defined(__cplusplus) || defined(__STDC__)\n");
-	fprintf(fout, "\n#if defined(__cplusplus) && defined(__EXTERN_C__)\n");
-	fprintf(fout, "extern \"C\" {\n");
-	fprintf(fout, "#endif\n");
-	fprintf(fout, "\tint yyback(int *, int);\n"); /* ? */
-	fprintf(fout, "\tint yyinput(void);\n"); /* ? */
-	fprintf(fout, "\tint yylook(void);\n"); /* ? */
-	fprintf(fout, "\tvoid yyoutput(int);\n"); /* ? */
-	fprintf(fout, "\tint yyracc(int);\n"); /* ? */
-	fprintf(fout, "\tint yyreject(void);\n"); /* ? */
-	fprintf(fout, "\tvoid yyunput(int);\n"); /* ? */
-	fprintf(fout, "\tint yylex(void);\n");
-	fprintf(fout, "#ifdef YYLEX_E\n");
-	fprintf(fout, "\tvoid yywoutput(wchar_t);\n");
-	fprintf(fout, "\twchar_t yywinput(void);\n");
-	fprintf(fout, "\tvoid yywunput(wchar_t);\n");
-	fprintf(fout, "#endif\n");
-
+	fprintf(fout,
+		"#endif\n"
+		"\n#if defined(__cplusplus) || defined(__STDC__)\n"
+		"\n#if defined(__cplusplus) && defined(__EXTERN_C__)\n"
+		"extern \"C\" {\n"
+		"#endif\n"
+		"\tint yyback(int *, int);\n" /* ? */
+		"\tint yyinput(void);\n" /* ? */
+		"\tint yylook(void);\n" /* ? */
+		"\tvoid yyoutput(int);\n" /* ? */
+		"\tint yyracc(int);\n" /* ? */
+		"\tint yyreject(void);\n" /* ? */
+		"\tvoid yyunput(int);\n" /* ? */
+		"\tint yylex(void);\n"
+		"#ifdef YYLEX_E\n"
+		"\tvoid yywoutput(wchar_t);\n"
+		"\twchar_t yywinput(void);\n"
+		"\tvoid yywunput(wchar_t);\n"
+		"#endif\n"
 	/* XCU4: type of yyless is int */
-	fprintf(fout, "#ifndef yyless\n");
-	fprintf(fout, "\tint yyless(int);\n");
-	fprintf(fout, "#endif\n");
-	fprintf(fout, "#ifndef yywrap\n");
-	fprintf(fout, "\tint yywrap(void);\n");
-	fprintf(fout, "#endif\n");
-	fprintf(fout, "#ifdef LEXDEBUG\n");
-	fprintf(fout, "\tvoid allprint(char);\n");
-	fprintf(fout, "\tvoid sprint(char *);\n");
-	fprintf(fout, "#endif\n");
-	fprintf(fout,
-	"#if defined(__cplusplus) && defined(__EXTERN_C__)\n");
-	fprintf(fout, "}\n");
-	fprintf(fout, "#endif\n\n");
-	fprintf(fout, "#ifdef __cplusplus\n");
-	fprintf(fout, "extern \"C\" {\n");
-	fprintf(fout, "#endif\n");
-	fprintf(fout, "\tvoid exit(int);\n");
-	fprintf(fout, "#ifdef __cplusplus\n");
-	fprintf(fout, "}\n");
-	fprintf(fout, "#endif\n\n");
-	fprintf(fout, "#endif\n");
-	fprintf(fout,
-	"# define unput(c)"
-	" {yytchar= (c);if(yytchar=='\\n')yylineno--;*yysptr++=yytchar;}\n");
-	fprintf(fout, "# define yymore() (yymorfg=1)\n");
+		"#ifndef yyless\n"
+		"\tint yyless(int);\n"
+		"#endif\n"
+		"#ifndef yywrap\n"
+		"\tint yywrap(void);\n"
+		"#endif\n"
+		"#ifdef LEXDEBUG\n"
+		"\tvoid allprint(char);\n"
+		"\tvoid sprint(char *);\n"
+		"#endif\n"
+		"#if defined(__cplusplus) && defined(__EXTERN_C__)\n"
+		"}\n"
+		"#endif\n\n"
+		"#ifdef __cplusplus\n"
+		"extern \"C\" {\n"
+		"#endif\n"
+		"\tvoid exit(int);\n"
+		"#ifdef __cplusplus\n"
+		"}\n"
+		"#endif\n\n"
+		"#endif\n"
+		"# define unput(c)"
+		" {yytchar= (c);if(yytchar=='\\n')yylineno--;*yysptr++=yytchar;}\n"
+		"# define yymore() (yymorfg=1)\n");
 	if (widecio) {
-		fprintf(fout, "#ifndef __cplusplus\n");
-		fprintf(fout, "%s%d%s\n",
+		fprintf(fout,
+			"#ifndef __cplusplus\n"
+			"%s%d%s\n",
 "# define input() (((yytchar=yysptr>yysbuf?U(*--yysptr):yygetwchar())==",
 		ctable['\n'],
 "?(yylineno++,yytchar):yytchar)==EOF?0:yytchar)");
-		fprintf(fout, "#else\n");
-		fprintf(fout, "%s%d%s\n",
+		fprintf(fout,
+			"#else\n"
+			"%s%d%s\n",
 "# define lex_input() (((yytchar=yysptr>yysbuf?U(*--yysptr):yygetwchar())==",
 		ctable['\n'],
 "?(yylineno++,yytchar):yytchar)==EOF?0:yytchar)");
-		fprintf(fout, "#endif\n");
 		fprintf(fout,
-		"# define ECHO (void)fprintf(yyout, \"%%ls\",yytext)\n");
-		fprintf(fout,
-		"# define REJECT { nstr = yyreject_w(); goto yyfussy;}\n");
-		fprintf(fout, "#define yyless yyless_w\n");
-		fprintf(fout, "int yyreject_w(void);\n");
-		fprintf(fout, "int yyleng;\n");
+			"#endif\n"
+			"# define ECHO (void)fprintf(yyout, \"%%ls\",yytext)\n"
+			"# define REJECT { nstr = yyreject_w(); goto yyfussy;}\n"
+			"#define yyless yyless_w\n"
+			"int yyreject_w(void);\n"
+			"int yyleng;\n");
 
 		/*
 		 * XCU4:
@@ -202,66 +207,66 @@ static const char yylexid[] USED = \"lex: %s\"\n", rel);
 		 */
 
 		if (isArray) {
-			fprintf(fout, "#define YYISARRAY\n");
-			fprintf(fout, "wchar_t yytext[YYLMAX];\n");
+			fprintf(fout,
+				"#define YYISARRAY\n"
+				"wchar_t yytext[YYLMAX];\n");
 		} else {
-			fprintf(fout, "wchar_t yy_tbuf[YYLMAX];\n");
-			fprintf(fout, "wchar_t * yytext = yy_tbuf;\n");
-			fprintf(fout, "int yytextsz = YYLMAX;\n");
-			fprintf(fout, "#ifndef YYTEXTSZINC\n");
-			fprintf(fout, "#define YYTEXTSZINC 100\n");
-			fprintf(fout, "#endif\n");
+			fprintf(fout,
+				"wchar_t yy_tbuf[YYLMAX];\n"
+				"wchar_t * yytext = yy_tbuf;\n"
+				"int yytextsz = YYLMAX;\n"
+				"#ifndef YYTEXTSZINC\n"
+				"#define YYTEXTSZINC 100\n"
+				"#endif\n");
 		}
 	} else {
-		fprintf(fout, "#ifndef __cplusplus\n");
-		fprintf(fout, "%s%d%s\n",
+		fprintf(fout,
+			"#ifndef __cplusplus\n"
+			"%s%d%s\n",
 "# define input() (((yytchar=yysptr>yysbuf?U(*--yysptr):getc(yyin))==",
 		ctable['\n'],
 "?(yylineno++,yytchar):yytchar)==EOF?0:yytchar)");
-		fprintf(fout, "#else\n");
-		fprintf(fout, "%s%d%s\n",
+		fprintf(fout,
+			"#else\n"
+			"%s%d%s\n",
 "# define lex_input() (((yytchar=yysptr>yysbuf?U(*--yysptr):getc(yyin))==",
 		ctable['\n'],
 "?(yylineno++,yytchar):yytchar)==EOF?0:yytchar)");
-		fprintf(fout, "#endif\n");
-		fprintf(fout, "#define ECHO fprintf(yyout, \"%%s\",yytext)\n");
+		fprintf(fout,
+			"#endif\n"
+			"#define ECHO fprintf(yyout, \"%%s\",yytext)\n");
 		if (handleeuc) {
 			fprintf(fout,
-"# define REJECT { nstr = yyreject_e(); goto yyfussy;}\n");
-			fprintf(fout, "int yyreject_e(void);\n");
-			fprintf(fout, "int yyleng;\n");
-			fprintf(fout, "size_t yywleng;\n");
+"# define REJECT { nstr = yyreject_e(); goto yyfussy;}\n"
+				"int yyreject_e(void);\n"
+				"int yyleng;\n"
+				"size_t yywleng;\n");
 			/*
 			 * XCU4:
 			 * If %array, yytext[] contains the token.
 			 * If %pointer, yytext is a pointer to yy_tbuf[].
 			 */
 			if (isArray) {
-				fprintf(fout, "#define YYISARRAY\n");
 				fprintf(fout,
-				"unsigned char yytext[YYLMAX*MB_LEN_MAX];\n");
-				fprintf(fout,
-				"wchar_t yywtext[YYLMAX];\n");
+					"#define YYISARRAY\n"
+					"unsigned char yytext[YYLMAX*MB_LEN_MAX];\n"
+					"wchar_t yywtext[YYLMAX];\n");
 			} else {
 				fprintf(fout,
-				"wchar_t yy_twbuf[YYLMAX];\n");
-				fprintf(fout,
-				"wchar_t yy_tbuf[YYLMAX*MB_LEN_MAX];\n");
-				fprintf(fout,
-				"unsigned char * yytext ="
-				"(unsigned char *)yy_tbuf;\n");
-				fprintf(fout,
-				"wchar_t * yywtext = yy_twbuf;\n");
-				fprintf(fout,
-						"int yytextsz = YYLMAX;\n");
-				fprintf(fout, "#ifndef YYTEXTSZINC\n");
-				fprintf(fout, "#define YYTEXTSZINC 100\n");
-				fprintf(fout, "#endif\n");
+					"wchar_t yy_twbuf[YYLMAX];\n"
+					"wchar_t yy_tbuf[YYLMAX*MB_LEN_MAX];\n"
+					"unsigned char * yytext ="
+					"(unsigned char *)yy_tbuf;\n"
+					"wchar_t * yywtext = yy_twbuf;\n"
+					"int yytextsz = YYLMAX;\n"
+					"#ifndef YYTEXTSZINC\n"
+					"#define YYTEXTSZINC 100\n"
+					"#endif\n");
 			}
 		} else {
 			fprintf(fout,
-"# define REJECT { nstr = yyreject(); goto yyfussy;}\n");
-			fprintf(fout, "int yyleng;\n");
+"# define REJECT { nstr = yyreject(); goto yyfussy;}\n"
+				"int yyleng;\n");
 
 			/*
 			 * XCU4:
@@ -269,18 +274,17 @@ static const char yylexid[] USED = \"lex: %s\"\n", rel);
 			 * If %pointer, yytext is a pointer to yy_tbuf[].
 			 */
 			if (isArray) {
-				fprintf(fout, "#define YYISARRAY\n");
-				fprintf(fout, "char yytext[YYLMAX];\n");
+				fprintf(fout,
+					"#define YYISARRAY\n"
+					"char yytext[YYLMAX];\n");
 			} else {
-				fprintf(fout, "char yy_tbuf[YYLMAX];\n");
 				fprintf(fout,
-				"char * yytext = yy_tbuf;\n");
-				fprintf(fout,
-					"int yytextsz = YYLMAX;\n");
-				fprintf(fout, "#ifndef YYTEXTSZINC\n");
-				fprintf(fout,
-					"#define YYTEXTSZINC 100\n");
-				fprintf(fout, "#endif\n");
+					"char yy_tbuf[YYLMAX];\n"
+					"char * yytext = yy_tbuf;\n"
+					"int yytextsz = YYLMAX;\n"
+					"#ifndef YYTEXTSZINC\n"
+					"#define YYTEXTSZINC 100\n"
+					"#endif\n");
 			}
 		}
 	}
@@ -289,49 +293,47 @@ static const char yylexid[] USED = \"lex: %s\"\n", rel);
 		fprintf(fout, "extern wchar_t *yysptr, yysbuf[];\n");
 	else
 		fprintf(fout, "extern char *yysptr, yysbuf[];\n");
-	fprintf(fout, "int yytchar;\n");
-	fprintf(fout, "FILE *yyin = (FILE *)-1, *yyout = (FILE *)-1;\n");
-	fprintf(fout, "#if defined (__GNUC__)\n");
 	fprintf(fout,
-	    "static void _yyioinit(void) __attribute__ ((constructor));\n");
-	fprintf(fout, "#elif defined (__SUNPRO_C)\n");
-	fprintf(fout, "#pragma init (_yyioinit)\n");
-	fprintf(fout, "#elif defined (__HP_aCC) || defined (__hpux)\n");
-	fprintf(fout, "#pragma INIT \"_yyioinit\"\n");
-	fprintf(fout, "#endif\n");
-	fprintf(fout, "static void _yyioinit(void) {\n");
-	fprintf(fout, "yyin = stdin; yyout = stdout; }\n");
-	fprintf(fout, "extern int yylineno;\n");
-	fprintf(fout, "struct yysvf { \n");
-	fprintf(fout, "\tstruct yywork *yystoff;\n");
-	fprintf(fout, "\tstruct yysvf *yyother;\n");
-	fprintf(fout, "\tint *yystops;};\n");
-	fprintf(fout, "struct yysvf *yyestate;\n");
-	fprintf(fout, "extern struct yysvf yysvec[], *yybgin;\n");
+		"int yytchar;\n"
+		"FILE *yyin = (FILE *)-1, *yyout = (FILE *)-1;\n"
+		"#if defined (__GNUC__)\n"
+		"static void _yyioinit(void) __attribute__ ((constructor));\n"
+		"#elif defined (__SUNPRO_C)\n"
+		"#pragma init (_yyioinit)\n"
+		"#elif defined (__HP_aCC) || defined (__hpux)\n"
+		"#pragma INIT \"_yyioinit\"\n"
+		"#endif\n"
+		"static void _yyioinit(void) {\n"
+		"yyin = stdin; yyout = stdout; }\n"
+		"extern int yylineno;\n"
+		"struct yysvf { \n"
+		"\tstruct yywork *yystoff;\n"
+		"\tstruct yysvf *yyother;\n"
+		"\tint *yystops;};\n"
+		"struct yysvf *yyestate;\n"
+		"extern struct yysvf yysvec[], *yybgin;\n");
 }
 
 static void
 rhd1(void)
 {
-	fprintf(fout, "integer function yylex(dummy)\n");
-	fprintf(fout, "define YYLMAX 200\n");
-	fprintf(fout, "define ECHO call yyecho(yytext,yyleng)\n");
 	fprintf(fout,
-	"define REJECT nstr = yyrjct(yytext,yyleng);goto 30998\n");
-	fprintf(fout, "integer nstr,yylook,yywrap\n");
-	fprintf(fout, "integer yyleng, yytext(YYLMAX)\n");
-	fprintf(fout, "common /yyxel/ yyleng, yytext\n");
-	fprintf(fout,
-	"common /yyldat/ yyfnd, yymorf, yyprev, yybgin, yylsp, yylsta\n");
-	fprintf(fout,
-	"integer yyfnd, yymorf, yyprev, yybgin, yylsp, yylsta(YYLMAX)\n");
-	fprintf(fout, "for(;;){\n");
-	fprintf(fout, "\t30999 nstr = yylook(dummy)\n");
-	fprintf(fout, "\tgoto 30998\n");
-	fprintf(fout, "\t30000 k = yywrap(dummy)\n");
-	fprintf(fout, "\tif(k .ne. 0){\n");
-	fprintf(fout, "\tyylex=0; return; }\n");
-	fprintf(fout, "\t\telse goto 30998\n");
+		"integer function yylex(dummy)\n"
+		"define YYLMAX 200\n"
+		"define ECHO call yyecho(yytext,yyleng)\n"
+		"define REJECT nstr = yyrjct(yytext,yyleng);goto 30998\n"
+		"integer nstr,yylook,yywrap\n"
+		"integer yyleng, yytext(YYLMAX)\n"
+		"common /yyxel/ yyleng, yytext\n"
+		"common /yyldat/ yyfnd, yymorf, yyprev, yybgin, yylsp, yylsta\n"
+		"integer yyfnd, yymorf, yyprev, yybgin, yylsp, yylsta(YYLMAX)\n"
+		"for(;;){\n"
+		"\t30999 nstr = yylook(dummy)\n"
+		"\tgoto 30998\n"
+		"\t30000 k = yywrap(dummy)\n"
+		"\tif(k .ne. 0){\n"
+		"\tyylex=0; return; }\n"
+		"\t\telse goto 30998\n");
 }
 
 void
@@ -344,18 +346,18 @@ phead2(void)
 static void
 chd2(void)
 {
-	fprintf(fout, "if (yyin == (FILE *)-1) yyin = stdin;\n");
-	fprintf(fout, "if (yyout == (FILE *)-1) yyout = stdout;\n");
-	fprintf(fout, "#if defined (__cplusplus) || defined (__GNUC__)\n");
 	fprintf(fout,
-	"/* to avoid CC and lint complaining yyfussy not being used ...*/\n");
-	fprintf(fout, "{static int __lex_hack = 0;\n");
-	fprintf(fout, "if (__lex_hack) { yyprevious = 0; goto yyfussy; } }\n");
-	fprintf(fout, "#endif\n");
-	fprintf(fout, "while((nstr = yylook()) >= 0)\n");
-	fprintf(fout, "yyfussy: switch(nstr){\n");
-	fprintf(fout, "case 0:\n");
-	fprintf(fout, "if(yywrap()) return(0); break;\n");
+		"if (yyin == (FILE *)-1) yyin = stdin;\n"
+		"if (yyout == (FILE *)-1) yyout = stdout;\n"
+		"#if defined (__cplusplus) || defined (__GNUC__)\n"
+	"/* to avoid CC and lint complaining yyfussy not being used ...*/\n"
+		"{static int __lex_hack = 0;\n"
+		"if (__lex_hack) { yyprevious = 0; goto yyfussy; } }\n"
+		"#endif\n"
+		"while((nstr = yylook()) >= 0)\n"
+		"yyfussy: switch(nstr){\n"
+		"case 0:\n"
+		"if(yywrap()) return(0); break;\n");
 }
 
 void
@@ -369,12 +371,12 @@ ptail(void)
 static void
 ctail(void)
 {
-	fprintf(fout, "case -1:\nbreak;\n");		/* for reject */
-	fprintf(fout, "default:\n");
 	fprintf(fout,
-	"(void)fprintf(yyout,\"bad switch yylook %%d\",nstr);\n");
-	fprintf(fout, "} return(0); }\n");
-	fprintf(fout, "/* end of yylex */\n");
+		"case -1:\nbreak;\n"		/* for reject */
+		"default:\n"
+		"(void)fprintf(yyout,\"bad switch yylook %%d\",nstr);\n"
+		"} return(0); }\n"
+		"/* end of yylex */\n");
 }
 
 static void
@@ -383,13 +385,15 @@ rtail(void)
 	int i;
 	fprintf(fout,
 	"\n30998 if(nstr .lt. 0 .or. nstr .gt. %d)goto 30999\n", casecount);
-	fprintf(fout, "nstr = nstr + 1\n");
-	fprintf(fout, "goto(\n");
+	fprintf(fout,
+		"nstr = nstr + 1\n"
+		"goto(\n");
 	for (i = 0; i < casecount; i++)
 		fprintf(fout, "%d,\n", 30000+i);
-	fprintf(fout, "30999),nstr\n");
-	fprintf(fout, "30997 continue\n");
-	fprintf(fout, "}\nend\n");
+	fprintf(fout,
+		"30999),nstr\n"
+		"30997 continue\n"
+		"}\nend\n");
 }
 
 void

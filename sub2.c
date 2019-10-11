@@ -327,10 +327,12 @@ cgoto(void)
 	CHR *q;
 	/* generate initial state, for each start condition */
 	if (ratfor) {
-		fprintf(fout, "blockdata\n");
-		fprintf(fout, "common /Lvstop/ vstop\n");
-		fprintf(fout, "define Svstop %d\n", nstates+1);
-		fprintf(fout, "integer vstop(Svstop)\n");
+		fprintf(fout,
+			"blockdata\n"
+			"common /Lvstop/ vstop\n"
+			"define Svstop %d\n"
+			"integer vstop(Svstop)\n"
+			, nstates+1);
 	} else
 		fprintf(fout, "int yyvstop[] = {\n0,\n");
 	while (stnum < 2 || stnum/2 < sptr) {
@@ -1051,8 +1053,9 @@ layout(void)
 
 	/* put out yysvec */
 
-	fprintf(fout, "struct yysvf yysvec[] = {\n");
-	fprintf(fout, "{ 0,\t0,\t0 },\n");
+	fprintf(fout,
+		"struct yysvf yysvec[] = {\n"
+		"{ 0,\t0,\t0 },\n");
 	for (i = 0; i <= stnum; i++) {	/* for each state */
 		if (cpackflg[i])
 			stoff[i] = -stoff[i];
@@ -1071,12 +1074,14 @@ layout(void)
 #endif
 		fprintf(fout, " },\t\t/* state %d */", i);
 	}
-	fprintf(fout, "{ 0,\t0,\t0}};\n");
+	fprintf(fout,
+		"{ 0,\t0,\t0}};\n"
 
 	/* put out yymatch */
 
-	fprintf(fout, "struct yywork *yytop = yycrank+%d;\n", yytop);
-	fprintf(fout, "struct yysvf *yybgin = yysvec+1;\n");
+		"struct yywork *yytop = yycrank+%d;\n"
+		"struct yysvf *yybgin = yysvec+1;\n"
+		, yytop);
 	if (optim) {
 		if (handleeuc) {
 			fprintf(fout, "int yymatch[] = {\n");
@@ -1121,8 +1126,10 @@ layout(void)
 	fprintf(fout, "0};\n");
 	if (handleeuc) {
 		/* Put out yycgidtbl */
-		fprintf(fout, "#define YYNCGIDTBL %d\n", ncgidtbl);
-		fprintf(fout, "\tunsigned long yycgidtbl[]={");
+		fprintf(fout,
+			"#define YYNCGIDTBL %d\n"
+			"\tunsigned long yycgidtbl[]={"
+			, ncgidtbl);
 		/*
 		 * Use "unsigned long" instead of "lchar" to minimize
 		 * the name-space polution for the application program.
@@ -1140,8 +1147,9 @@ static void
 rprint(int *a, char *s, int n)
 {
 	int i;
-	fprintf(fout, "block data\n");
-	fprintf(fout, "common /L%s/ %s\n", s, s);
+	fprintf(fout,
+		"block data\n"
+		"common /L%s/ %s\n", s, s);
 	fprintf(fout, "define S%s %d\n", s, n);
 	fprintf(fout, "integer %s (S%s)\n", s, s);
 	for (i = 1; i <= n; i++) {
@@ -1173,8 +1181,9 @@ static void
 bprint(char *a, char *s, int n)
 {
 	int i, j, k;
-	fprintf(fout, "block data\n");
-	fprintf(fout, "common /L%s/ %s\n", s, s);
+	fprintf(fout,
+		"block data\n"
+		"common /L%s/ %s\n", s, s);
 	fprintf(fout, "define S%s %d\n", s, n);
 	fprintf(fout, "integer %s (S%s)\n", s, s);
 	for (i = 1; i < n; i += 8) {
