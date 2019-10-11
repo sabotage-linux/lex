@@ -85,8 +85,8 @@ main(int argc, char **argv)
 				break;
 #endif
 			case 'V':
-				fprintf(stderr, "lex:%s , %s\n", pkg, rel);
-				break;
+				fprintf(stderr, "lex:%s, %s\n", pkg, rel);
+				return 0;
 			case 'Q':
 				v_stmp = optarg;
 				if (*v_stmp != 'y' && *v_stmp != 'n')
