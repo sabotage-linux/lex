@@ -3,7 +3,7 @@ BINDIR = $(PREFIX)/bin
 LIBDIR = $(PREFIX)/lib
 MANDIR = $(PREFIX)/share/man
 
-XOBJ = main.o sub1.o sub2.o sub3.o header.o wcio.o parser.o getopt.o lsearch.o
+XOBJ = main.o sub1.o sub2.o sub3.o header.o wcio.o parser.o lsearch.o
 
 LOBJ = allprint.o libmain.o reject.o yyless.o yywrap.o \
 	allprint_w.o reject_w.o yyless_w.o reject_e.o yyless_e.o
