@@ -1,3 +1,8 @@
+PREFIX = /usr/local
+BINDIR = $(PREFIX)/bin
+LIBDIR = $(PREFIX)/lib
+MANDIR = $(PREFIX)/share/man
+
 XOBJ = main.o sub1.o sub2.o sub3.o header.o wcio.o parser.o getopt.o lsearch.o
 
 LOBJ = allprint.o libmain.o reject.o yyless.o yywrap.o \
@@ -9,6 +14,7 @@ WFLAGS = -DEUC -DJLSLEX -DWOPTION
 EFLAGS = -DEUC -DJLSLEX -DEOPTION
 
 RANLIB = ranlib
+INSTALL = install
 
 HOSTCC = $(CC)
 
@@ -49,13 +55,10 @@ reject_e.o: reject.c
 yyless_e.o: yyless.c
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) $(WARN) $(EFLAGS) yyless.c -o $@
 
-install: all
-	test -d $(ROOT)$(BINDIR) || mkdir -p $(ROOT)$(BINDIR)
-	$(INSTALL) -c -m 755 lex $(ROOT)$(BINDIR)/lex
-	$(STRIP) $(ROOT)$(BINDIR)/lex
-	$(INSTALL) -c -m 644 libl.a $(ROOT)$(LIBDIR)/libl.a
-	test -d $(ROOT)$(MANDIR)/man1 || mkdir -p $(ROOT)$(MANDIR)/man1
-	$(INSTALL) -c -m 644 lex.1 $(ROOT)$(MANDIR)/man1/lex.1
+install: lex lex.1 libl.a
+	$(INSTALL) -D -m 755 lex $(DESTDIR)$(BINDIR)/lex
+	$(INSTALL) -D -m 644 libl.a $(DESTDIR)$(LIBDIR)/libl.a
+	$(INSTALL) -D -m 644 lex.1 $(DESTDIR)$(MANDIR)/man1/lex.1
 
 clean:
 	rm -f lex libl.a $(XOBJ) $(LOBJ) $(GENH) parser.c form2hdr core log *~
