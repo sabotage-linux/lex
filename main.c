@@ -71,9 +71,9 @@ main(int argc, char **argv)
 	errorf = stderr;
 	setlocale(LC_CTYPE, "");
 #ifdef DEBUG
-	while ((c = getopt(argc, argv, "dyctvnewVQ:")) != EOF) {
+	while ((c = getopt(argc, argv, "dyctvnewVQ:o:")) != EOF) {
 #else
-	while ((c = getopt(argc, argv, "ctvnewVQ:")) != EOF) {
+	while ((c = getopt(argc, argv, "ctvnewVQ:o:")) != EOF) {
 #endif
 		switch (c) {
 #ifdef DEBUG
@@ -92,6 +92,13 @@ main(int argc, char **argv)
 				if (*v_stmp != 'y' && *v_stmp != 'n')
 					error(
 					"lex: -Q should be followed by [y/n]");
+				break;
+			case 'o':
+				fout = fopen(optarg, "w");
+				if (!fout)
+					error(
+					"lex: could not open %s for writing",
+					optarg);
 				break;
 			case 'c':
 				ratfor = FALSE;
@@ -119,7 +126,7 @@ main(int argc, char **argv)
 				break;
 			default:
 				fprintf(stderr,
-				"Usage: lex [-ewctvnV] [-Q(y/n)] [file]\n");
+				"Usage: lex [-ewctvnV] [-o outfile] [-Q(y/n)] [file]\n");
 				exit(1);
 		}
 	}

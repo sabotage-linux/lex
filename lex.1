@@ -41,6 +41,7 @@ lex \- generator of lexical analysis programs
 .ad l
 .nh
 \fBlex\fR [\fB\-ctvnVew\fR] [\fB\-Q\fR(\fBy\fR|\fBn\fR)]
+[\fB\-o\ \fIoutputfile\fR]
 [\fIfiles\fR\ ...]
 .br
 .ad b
@@ -117,6 +118,10 @@ on stderr and exits.
 .B \-w
 Generates output that can handle multibyte characters,
 with \fIyytext[]\fR being of type \fIwchar_t[]\fR.
+This option is an extension.
+.TP
+\fB\-o \fIoutputfile\fR
+Use `\fIoutputfile\fR' instead of `lex.yy.c'.
 This option is an extension.
 .SH "SEE ALSO"
 yacc(1)
