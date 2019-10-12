@@ -45,6 +45,8 @@ extern int  yylex(void);
 
 #include <ctype.h>
 #include <wchar.h>
+#include <limits.h>
+#include <string.h>
 #include <inttypes.h>
 #ifndef	__sun
 #define	wcsetno(c)	0
@@ -288,6 +290,57 @@ r:	CHAR
 	;
 
 %%
+/* converts a pure ascii wchar_t* into a C string, on word
+   boundaries (whitespace). returns -1 on error, else
+   number of bytes converted.
+   buf size needs to be bigger than MB_LEN_MAX to store at
+   least one char and trailing zero terminator.
+   error: buf size insufficient, or non-ascii/bogus wchar_t* */
+static int wcwordtos(CHR *ws, char *buf, size_t buflen) {
+	int ret = 0, n;
+	while(1) {
+		if(buflen <= MB_LEN_MAX) return -1;
+		if(iswspace(ws[ret]) || ws[ret] == 0) {
+			*buf = 0;
+			return ret;
+		}
+		n = wctomb(buf, ws[ret]);
+		if(n != 1) return -1;
+		++ret;
+		++buf;
+		--buflen;
+	}
+	/* should never get here */
+	return -1;
+}
+static void flex_noyywrap(void) {
+	fprintf(fout, "# define yywrap() 1\n");
+}
+static void parse_flex_opts(CHR *p) {
+	static const struct {
+		const char name[9];
+		void(*action)(void);
+	} flex_opts[] = {
+		{ "noyywrap", flex_noyywrap},
+		{ {0}, 0 }
+	};
+	while(1) {
+		char buf[60+MB_LEN_MAX];
+		int len, i;
+		while(*p && iswspace(*p)) p++;
+		if(!*p) return;
+		len = wcwordtos(p, buf, sizeof buf);
+		if(len < 0) error("invalid option directive");
+		for(i = 0; flex_opts[i].action; ++i) {
+			if(!strcmp(flex_opts[i].name, buf))
+				{ flex_opts[i].action(); break; }
+		}
+		if(!flex_opts[i].action)
+			warning("ignoring flex option '%s'", buf);
+		p += len;
+	}
+}
+
 int
 yylex(void)
 {
@@ -385,6 +438,11 @@ yylex(void)
 						if(report == 2)report = 1;
 						continue;
 					case 'o': case 'O':
+						if ((*(p+2) == 'p') && (*(p+3) == 't')) {
+							while(*p && !iswspace(*p)) p++;
+							parse_flex_opts(p);
+							continue;
+						}
 						p += 2;
 						outsize = siconv(p);
 						if(outsize<=0)error("illegal size of output array");
