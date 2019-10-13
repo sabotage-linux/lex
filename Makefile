@@ -75,6 +75,7 @@ reject.o: reject.c
 sub1.o: sub1.c ldefs.c
 sub2.o: sub2.c ldefs.c
 sub3.o: sub3.c ldefs.c search.h
+parser.o: parser.y ldefs.c
 yyless.o: yyless.c
 yywrap.o: yywrap.c
 lsearch.o: search.h
