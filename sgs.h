@@ -23,8 +23,8 @@
  * Copyright (c) 2005 Gunnar Ritter, Freiburg i. Br., Germany
  */
 const char sccsid[] = "@(#)lex.sl	2.13 (gritter) 4/14/07";
-const char pkg[] = "Heirloom Development Tools";
-const char rel[] = "2.13 (gritter) 4/14/07";
+const char pkg[] = "Heirloom/Sabotage Linux";
+const char rel[] = "2.14";
 /* SLIST */
 /*
 allprint.c: * Sccsid @(#)allprint.c	1.4 (gritter) 11/27/05
