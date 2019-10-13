@@ -2,7 +2,13 @@ lex
 form2hdr
 *.o
 *.a
+parser.c
 n*form.h
+*.tab.c
+*.tab.h
+lex.yy.c
+a.out
+*.xz
 GPATH
 GRTAGS
 GTAGS
