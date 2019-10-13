@@ -19,6 +19,7 @@ INSTALL = install
 HOSTCC = $(CC)
 
 .c.o: ; $(CC) -c $(CFLAGS) $(CPPFLAGS) $(WARN) $<
+.y.c: ; $(YACC) -o $@ $<
 
 all: lex libl.a
 
