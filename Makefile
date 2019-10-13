@@ -83,3 +83,6 @@ ncform.h: form2hdr
 nrform.h: form2hdr
 
 .PHONY: all clean mrproper install
+# prevent GNU make from deleting parser.c after "all" finishes
+# it could be needed for debugging.
+.SECONDARY: parser.c
