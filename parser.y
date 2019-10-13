@@ -804,15 +804,21 @@ start:
 						goto character;
 					i = lookup(token,sname);
 					lex_startcond_lookupval = i;
-					if(i < 0) {
+					if(i < 0 && token[0] == '*' && token[1] == 0) {
+						i = 0;
+						x = SCON;
+						while(sname[i]) {
+							if (exclusive[i]) x = XSCON;
+							*slptr++ = ++i;
+						}
+					} else if(i < 0) {
 						fatal = 0;
 						n_error++;
 						error("undefined start condition %ls",token);
 						fatal = 1;
 						continue;
-						}
-					*slptr++ = i+1;
-					} while(c && c != '>');
+					} else *slptr++ = i+1;
+				} while(c && c != '>');
 				*slptr++ = 0;
 				/* check if previous value re-usable */
 				for (xp=slist; xp<t; )
@@ -832,11 +838,12 @@ start:
 				yylval.cp = (CHR *)t;
 
 				/* XCU4: add XSCON */
-
-				if (exclusive[lex_startcond_lookupval])
-					x = XSCON;
-				else
-					x = SCON;
+				if (lex_startcond_lookupval >= 0) {
+					if (exclusive[lex_startcond_lookupval])
+						x = XSCON;
+					else
+						x = SCON;
+				}
 				break;
 			case '"':
 				i = 0;
