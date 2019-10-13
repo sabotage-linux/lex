@@ -99,7 +99,11 @@ int fatal = 1;
 int sargc;
 char **sargv;
 CHR buf[BUF_SIZ];
+#ifdef WITH_RATFOR
 int ratfor;		/* 1 = ratfor, 0 = C */
+#else
+#define ratfor 0
+#endif
 int yyline;		/* line number of file */
 int eof;
 int lgatflg;

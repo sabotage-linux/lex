@@ -1,3 +1,6 @@
+# add -DWITH_RATFOR to your C/CPPFLAGS if you want ratfor support
+# adds about 4 KB to binary size
+
 PREFIX = /usr/local
 BINDIR = $(PREFIX)/bin
 LIBDIR = $(PREFIX)/lib

@@ -186,7 +186,11 @@ extern char **sargv;
 extern char *v_stmp;
 extern char *release_string;
 extern CHR buf[];
+#ifdef WITH_RATFOR
 extern int ratfor;		/* 1 = ratfor, 0 = C */
+#else
+#define ratfor 0
+#endif
 extern int fatal;
 extern int n_error;
 extern int copy_line;

@@ -45,7 +45,9 @@
 
 #include "nceucform.h"
 #include "ncform.h"
+#ifdef WITH_RATFOR
 #include "nrform.h"
+#endif
 
 static wchar_t  L_INITIAL[] = {'I', 'N', 'I', 'T', 'I', 'A', 'L', 0};
 
@@ -101,7 +103,9 @@ main(int argc, char **argv)
 					optarg);
 				break;
 			case 'c':
+#ifdef WITH_RATFOR
 				ratfor = FALSE;
+#endif
 				break;
 			case 't':
 				fout = stdout;
@@ -231,12 +235,18 @@ main(int argc, char **argv)
 	free3core();
 #endif
 	if (handleeuc) {
+#ifdef WITH_RATFOR
 		if (ratfor)
 			error("Ratfor is not supported by -w or -e option.");
+#endif
 		driver = nceucform;
 	}
 	else
+#ifdef WITH_RATFOR
 		driver = ratfor ? nrform : ncform;
+#else
+		driver = ncform;
+#endif
 
 	fprintf(fout, "%s", driver);
 	fclose(fout);

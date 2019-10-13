@@ -46,7 +46,11 @@ static void rtail(void);
 void
 phead1(void)
 {
+#ifdef WITH_RATFOR
 	ratfor ? rhd1() : chd1();
+#else
+	chd1();
+#endif
 }
 
 static void
@@ -314,6 +318,7 @@ static const char yylexid[] USED = \"lex: %s\"\n", rel);
 		"extern struct yysvf yysvec[], *yybgin;\n");
 }
 
+#ifdef WITH_RATFOR
 static void
 rhd1(void)
 {
@@ -335,6 +340,7 @@ rhd1(void)
 		"\tyylex=0; return; }\n"
 		"\t\telse goto 30998\n");
 }
+#endif
 
 void
 phead2(void)
@@ -364,7 +370,11 @@ void
 ptail(void)
 {
 	if (!pflag)
+#ifdef WITH_RATFOR
 		ratfor ? rtail() : ctail();
+#else
+		ctail();
+#endif
 	pflag = 1;
 }
 
@@ -379,6 +389,7 @@ ctail(void)
 		"/* end of yylex */\n");
 }
 
+#ifdef WITH_RATFOR
 static void
 rtail(void)
 {
@@ -395,6 +406,7 @@ rtail(void)
 		"30997 continue\n"
 		"}\nend\n");
 }
+#endif
 
 void
 statistics(void)

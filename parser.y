@@ -530,12 +530,19 @@ Character table (%t) is supported only in ASCII compatibility mode.\n");
 						lgate();
 						continue;
 					case 'r': case 'R':
+#ifdef WITH_RATFOR
 						c = 'r';
 						/* FALLTHRU */
+#else
+						error("ratfor support not compiled in");
+						break;
+#endif
 					case 'c': case 'C':
 						if(lgatflg)
 							error("Too late for language specifier");
+#ifdef WITH_RATFOR
 						ratfor = (c == 'r');
+#endif
 						continue;
 					case '{':
 						lgate();
