@@ -1,0 +1,57 @@
+lex
+===
+
+a POSIX compatible lex implementation.
+
+about
+-----
+
+latest version taken from heirloom (which in turn is a modified version of
+opensolaris'), with a number of improvements.
+
+- stand-alone makefile
+- parser.y modified to compile with posix yacc
+- added -o outputfile command line option
+- packed external "driver" files into executable
+  (this makes the lex binary completely dependency-less)
+- limited support for some bison features
+- some tweaks for smaller binary size
+
+opensolaris repos and illumos have been harvested for improvements, but there
+were almost none (almost exclusively lint-related cosmetics). as illumos seems
+to use flex as main lex program, it is unlikely it will see further
+improvements there.
+
+in fact, the heirloom version used here has been skillfully ported to support
+64bit, so it is actually superior to its predecessor, which still has
+pointer-to-int truncation issues.
+
+purpose
+-------
+
+lex is a standard utility mandated by POSIX, so it's supposed to be available on
+every POSIX system.
+
+usually, `GNU flex` is used for this purpose.
+however flex is like most GNU tools feature-packed and thus quite bloated.
+including documentation, it takes up about 1.3MB of disk space (0.7MB w/o).
+flex has the additional disadvantage of requiring GNU m4.
+
+some people even prefer to hand-craft their lexer, because they consider
+GNU flex to be too heavy-weight as a dependency.
+
+this version of lex compiles to a ~70KB binary with musl libc, and in less than a
+second on PCs built during the last 10 years.
+
+unfortunately, many projects requiring a lexer already use lots of flex features
+(probably due to the lack of an alternative - until now), so someone routinely
+building packages from source will likely need to have flex installed anyway.
+however, a casual user or developer might well find that POSIX lex is more than
+sufficient for his project, and opt for this implementation, or prefer to have
+a tiny statically linked lex binary he can use on all his linux systems without
+having to carry around an additional bag of required files.
+
+license
+-------
+
+the opensolaris CDDL license applies to this project.
