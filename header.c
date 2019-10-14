@@ -35,7 +35,7 @@
  * Sccsid @(#)header.c	1.12 (gritter) 9/23/06
  */
 
-#include "ldefs.c"
+#include "ldefs.h"
 
 static void rhd1(void);
 static void chd1(void);

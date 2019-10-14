@@ -70,18 +70,18 @@ clean:
 mrproper: clean
 
 allprint.o: allprint.c
-header.o: header.c ldefs.c
-ldefs.o: ldefs.c
+header.o: header.c ldefs.h
 libmain.o: libmain.c
-main.o: main.c once.h ldefs.c sgs.h nceucform.h ncform.h nrform.h
+main.o: main.c once.h ldefs.h sgs.h nceucform.h ncform.h nrform.h
 reject.o: reject.c
-sub1.o: sub1.c ldefs.c
-sub2.o: sub2.c ldefs.c
-sub3.o: sub3.c ldefs.c search.h
-parser.o: parser.y ldefs.c
+sub1.o: sub1.c ldefs.h
+sub2.o: sub2.c ldefs.h
+sub3.o: sub3.c ldefs.h search.h
+parser.o: parser.y ldefs.h
 yyless.o: yyless.c
 yywrap.o: yywrap.c
 lsearch.o: search.h
+wcio.o: ldefs.h
 nceucform.h: form2hdr
 ncform.h: form2hdr
 nrform.h: form2hdr

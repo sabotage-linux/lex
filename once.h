@@ -37,7 +37,7 @@
  * Sccsid @(#)once.h	1.4 (gritter) 11/26/05
  */
 
-#include "ldefs.c"
+#include "ldefs.h"
 
 /* once.c */
 	/* because of external definitions, this code should occur only once */

@@ -1,3 +1,6 @@
+#ifndef LDEFS_H
+#define LDEFS_H
+
 /*
  * CDDL HEADER START
  *
@@ -310,3 +313,5 @@ extern wint_t lex_putwc(wchar_t, FILE *);
 #define	index		lex_index
 
 extern int isArray;		/* XCU4: for %array %pointer */
+
+#endif

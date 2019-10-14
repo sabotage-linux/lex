@@ -75,7 +75,7 @@ extern int  yylex(void);
 %left '*' '+' '?'
 
 %{
-#include "ldefs.c"
+#include "ldefs.h"
 
 #define YYSTYPE union _yystype_
 union _yystype_
