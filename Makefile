@@ -29,12 +29,7 @@ all: lex libl.a
 form2hdr: form2hdr.c
 	$(HOSTCC) $(HOSTCFLAGS) form2hdr.c -o $@
 
-nceucform.h: nceucform
-	./form2hdr $< > $@
-ncform.h: ncform
-	./form2hdr $< > $@
-nrform.h: nrform
-	./form2hdr $< > $@
+$(GENH): %.h: % ; ./form2hdr -c $< > $@
 
 lex: $(XOBJ)
 	$(CC) $(LDFLAGS) $(XOBJ) $(LIBS) -o lex
@@ -72,7 +67,7 @@ mrproper: clean
 allprint.o: allprint.c
 header.o: header.c ldefs.h
 libmain.o: libmain.c
-main.o: main.c once.h ldefs.h sgs.h nceucform.h ncform.h nrform.h
+main.o: main.c once.h ldefs.h sgs.h $(GENH) lzcomp.h
 reject.o: reject.c
 sub1.o: sub1.c ldefs.h
 sub2.o: sub2.c ldefs.h
@@ -82,9 +77,7 @@ yyless.o: yyless.c
 yywrap.o: yywrap.c
 lsearch.o: search.h
 wcio.o: ldefs.h
-nceucform.h: form2hdr
-ncform.h: form2hdr
-nrform.h: form2hdr
+$(GENH): form2hdr
 
 .PHONY: all clean mrproper install
 # prevent GNU make from deleting parser.c after "all" finishes

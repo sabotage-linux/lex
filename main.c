@@ -50,6 +50,17 @@
 #include "nrform.h"
 #endif
 
+#define LZ_DECOMPRESSOR
+#define LZ_UNSAFE
+#include "lzcomp.h"
+static char* decomp(const unsigned char *in,
+	unsigned inlen, unsigned outlen) {
+	char *buf = myalloc(1, outlen);
+	lz_uncompress(in, buf, inlen);
+	return buf;
+}
+#define DECOMP(X) decomp((X).data, (X).clen, (X).ulen)
+
 #ifdef WHOLE_PROGRAM
 #include "sub1.c"
 #include "sub2.c"
@@ -249,13 +260,13 @@ main(int argc, char **argv)
 		if (ratfor)
 			error("Ratfor is not supported by -w or -e option.");
 #endif
-		driver = nceucform;
+		driver = DECOMP(nceucform);
 	}
 	else
 #ifdef WITH_RATFOR
-		driver = ratfor ? nrform : ncform;
+		driver = ratfor ? DECOMP(nrform) : DECOMP(ncform);
 #else
-		driver = ncform;
+		driver = DECOMP(ncform);
 #endif
 
 	fprintf(fout, "%s", driver);
