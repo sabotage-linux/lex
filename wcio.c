@@ -24,13 +24,14 @@
  *
  * Sccsid @(#)wcio.c	1.1 (gritter) 6/25/05
  */
+#include "ldefs.h"
+#undef getwc
+#undef putwc
 #include <stdlib.h>
 #include <wchar.h>
 #include <stdio.h>
 #include <limits.h>
 #include <errno.h>
-
-extern int	error(char *, ...);
 
 /*
  * This is like getwc() but issues an error message when an illegal
