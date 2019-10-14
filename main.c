@@ -36,6 +36,7 @@
  * Sccsid @(#)main.c	1.9 (gritter) 11/26/05
  */
 
+#include <wchar.h>
 #include <string.h>
 #include "once.h"
 #include "sgs.h"
@@ -47,6 +48,15 @@
 #include "ncform.h"
 #ifdef WITH_RATFOR
 #include "nrform.h"
+#endif
+
+#ifdef WHOLE_PROGRAM
+#include "sub1.c"
+#include "sub2.c"
+#include "sub3.c"
+#include "header.c"
+#include "parser.c"
+#include "lsearch.c"
 #endif
 
 static wchar_t  L_INITIAL[] = {'I', 'N', 'I', 'T', 'I', 'A', 'L', 0};
@@ -366,3 +376,7 @@ yyerror(char *s)
 	fprintf(stderr,
 		"\"%s\":line %d: Error: %s\n", sargv[optind], yyline, s);
 }
+
+#ifdef WHOLE_PROGRAM
+#include "wcio.c"
+#endif
