@@ -155,6 +155,7 @@ extern lchar yycgidtbl[];
 extern int yycgid(wchar_t);
 extern Boolean handleeuc; /* TRUE iff -w or -e option is specified. */
 extern Boolean widecio; /* TRUE iff -w option is specified. */
+extern Boolean caseless; /* TRUE iff -i option is specified. */
 
 #define	DEFSECTION 1
 #define	RULESECTION 2

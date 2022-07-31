@@ -97,7 +97,7 @@ main(int argc, char **argv)
 #ifdef DEBUG
 	while ((c = getopt(argc, argv, "dyctvnewVQ:o:")) != EOF) {
 #else
-	while ((c = getopt(argc, argv, "ctvnewVQ:o:")) != EOF) {
+	while ((c = getopt(argc, argv, "ctvneiwVQ:o:")) != EOF) {
 #endif
 		switch (c) {
 #ifdef DEBUG
@@ -150,9 +150,12 @@ main(int argc, char **argv)
 				handleeuc = 1;
 				widecio = 0;
 				break;
+			case 'i':
+				caseless = TRUE;
+				break;
 			default:
 				fprintf(stderr,
-				"Usage: lex [-ewctvnV] [-o outfile] [-Q(y/n)] [file]\n");
+				"Usage: lex [-eiwctvnV] [-o outfile] [-Q(y/n)] [file]\n");
 				exit(1);
 		}
 	}
