@@ -676,7 +676,7 @@ mn2(int a, intptr_t d, intptr_t c)
 {
 	if (tptr >= treesize) {
 		tptr++;
-		error("Parse tree too big %s",
+		error("Parse tree too big (%d) %s", treesize,
 			(treesize == TREESIZE ? "\nTry using %e num" : ""));
 	}
 	if (d >= treesize) {
@@ -723,7 +723,7 @@ mn1(int a, intptr_t d)
 {
 	if (tptr >= treesize) {
 		tptr++;
-		error("Parse tree too big %s",
+		error("Parse tree too big (%d) %s", treesize,
 		(treesize == TREESIZE ? "\nTry using %e num" : ""));
 	}
 	name[tptr] = a;
@@ -766,7 +766,7 @@ mn0(int a)
 {
 	if (tptr >= treesize) {
 		tptr++;
-		error("Parse tree too big %s",
+		error("Parse tree too big (%d) %s", treesize,
 			(treesize == TREESIZE ? "\nTry using %e num" : ""));
 	}
 

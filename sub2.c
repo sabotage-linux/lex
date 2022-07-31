@@ -93,7 +93,8 @@ cfoll(int v)
 				*pcptr++ = 0;
 				if (pcptr > pchar + pchlen)
 					error(
-					"Too many packed character classes");
+					"Too many packed character classes (%d)",
+                                                pchlen);
 				left[v] = (intptr_t)p;
 				name[v] = RCCL;	/* RNCCL eliminated */
 #ifdef DEBUG
@@ -167,7 +168,7 @@ add(int **array, int n)
 	nxtpos = temp;
 	if (nxtpos >= positions+maxpos)
 		error(
-		"Too many positions %s",
+		"Too many positions (%d) %s", maxpos,
 		(maxpos == MAXPOS ? "\nTry using %p num" : ""));
 }
 
@@ -426,8 +427,8 @@ cgoto(void)
 				else if (xstate == -1) {
 					if (stnum+1 >= nstates) {
 						stnum++;
-						error("Too many states %s",
-						(nstates == NSTATES ?
+						error("Too many states (%d) %s",
+						nstates, (nstates == NSTATES ?
 						"\nTry using %n num":""));
 					}
 					add(state, ++stnum);
@@ -714,7 +715,7 @@ nopack:
 	} else
 		if (nptr > ntrans)
 			error(
-			"Too many transitions %s",
+			"Too many transitions (%d) %s", ntrans,
 			(ntrans == NTRANS ? "\nTry using %a num" : ""));
 }
 
@@ -968,7 +969,7 @@ layout(void)
 			do {
 				startup += 1;
 				if (startup > outsize - ZCH)
-					error("output table overflow");
+					error("output table overflow (%d)", outsize);
 				for (j = bot; j <= top; j++) {
 					k = startup+ctable[nchar[j]];
 					if (verify[k])
@@ -995,7 +996,7 @@ layout(void)
 			do {
 				startup += 1;
 				if (startup > outsize - ZCH)
-					error("output table overflow");
+					error("output table overflow (%d)", outsize);
 				for (j = bot; j <= top; j++) {
 					k = startup + nchar[j];
 					if (verify[k])
@@ -1070,12 +1071,12 @@ layout(void)
 		else
 			fprintf(fout, "0");
 #ifdef DEBUG
-		fprintf(fout, " },\t\t/* state %d */", i);
+		fprintf(fout, " },\n\t/* state %d */", i);
 #endif
-		fprintf(fout, " },\t\t/* state %d */", i);
+		fprintf(fout, " },\n\t/* state %d */", i);
 	}
 	fprintf(fout,
-		"{ 0,\t0,\t0}};\n"
+		"{ 0,\t0,\t0}\n};\n"
 
 	/* put out yymatch */
 
