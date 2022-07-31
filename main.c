@@ -88,6 +88,7 @@ main(int argc, char **argv)
 	int c;
 	Boolean eoption = 0, woption = 0;
 	const char *driver = 0;
+        const char *fnout = "yy.lex.c";
 
 	sargv = argv;
 	sargc = argc;
@@ -172,6 +173,13 @@ main(int argc, char **argv)
 		}
 	} else
 		fin = stdin;
+        if(!fout) {
+                fout = fopen(fnout, "w");
+                if (!fout)
+                        error(
+                        "lex: could not open %s for writing",
+                        fnout);
+        }
 
 	/* may be gotten: def, subs, sname, schar, ccl, dchar */
 	gch();
