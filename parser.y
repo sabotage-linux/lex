@@ -132,7 +132,7 @@ defns:	defns STR STR
 			error("Too many definitions");
 		dp += slength($3.cp) + 1;
 		if(dp >= dchar+DEFCHAR)
-			error("Definitions too long");
+			error("Definitions too long (%d)", DEFCHAR);
 		subs[dptr]=def[dptr]=0;	/* for lookup - require ending null */
 	}
 	|
@@ -801,6 +801,7 @@ start:
 				if(prev != '\n')  /* not at line begin, not start */
 					goto character;
 				t = slptr;
+                                x = 0;
 				do {
 					i = 0;
 					if(!isascii(c = gch()))
