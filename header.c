@@ -113,8 +113,9 @@ static const char yylexid[] USED = \"lex: %s\"\n", rel);
 	if (ZCH > NCH)
 		fprintf(fout, "# define U(x) ((x)&0377)\n");
 	else
+		fprintf(fout, "# define U(x) x\n");
+
 	fprintf(fout,
-		"# define U(x) x\n"
 		"# define NLSTATE yyprevious=YYNEWLINE\n"
 		"# define BEGIN yybgin = yysvec + 1 +\n"
 		"# define INITIAL 0\n"
