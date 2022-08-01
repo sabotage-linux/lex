@@ -51,6 +51,11 @@ yylook()
 	register struct yywork *yyt;
 	struct yysvf *yyz;
 	int yych, yyfirst;
+#ifdef LEXCASELESS
+	int yychnc;
+#else
+#define yychnc yych
+#endif
 	struct yywork *yyr;
 # ifdef LEXDEBUG
 	int debug;
@@ -120,8 +125,11 @@ yylook()
 				}
 # endif
 			yyr = yyt;
+#ifdef LEXCASELESS
+                        yychnc = tolower(yych);
+#endif
 			if ( yyt > yycrank){
-				yyt = yyr + yych;
+				yyt = yyr + yychnc;
 				if (yyt <= yytop && yyt->verify+yysvec == yystate){
 					if(yyt->advance+yysvec == YYLERR)	/* error transitions */
 						{unput(*--yylastch);break;}
@@ -139,7 +147,7 @@ yylook()
 # ifdef LEXDEBUG
 				if(debug)fprintf(yyout,"compressed state\n");
 # endif
-				yyt = yyt + yych;
+				yyt = yyt + yychnc;
 				if(yyt <= yytop && yyt->verify+yysvec == yystate){
 					if(yyt->advance+yysvec == YYLERR)	/* error transitions */
 						{unput(*--yylastch);break;}
@@ -150,11 +158,11 @@ yylook()
 					}
 					goto contin;
 					}
-				yyt = yyr + YYU(yymatch[yych]);
+				yyt = yyr + YYU(yymatch[yychnc]);
 # ifdef LEXDEBUG
 				if(debug){
 					fprintf(yyout,"try fall back character ");
-					allprint(YYU(yymatch[yych]));
+					allprint(YYU(yymatch[yychnc]));
 					putchar('\n');
 					}
 # endif

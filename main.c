@@ -88,16 +88,17 @@ main(int argc, char **argv)
 	int c;
 	Boolean eoption = 0, woption = 0;
 	const char *driver = 0;
+        const char *fnout = "yy.lex.c";
 
 	sargv = argv;
 	sargc = argc;
 	errorf = stderr;
 	setlocale(LC_CTYPE, "");
+	while ((c = getopt(argc, argv,
 #ifdef DEBUG
-	while ((c = getopt(argc, argv, "dyctvnewVQ:o:")) != EOF) {
-#else
-	while ((c = getopt(argc, argv, "ctvnewVQ:o:")) != EOF) {
+                "dy"
 #endif
+                "ctvneiwVQ:o:")) != EOF) {
 		switch (c) {
 #ifdef DEBUG
 			case 'd':
@@ -149,9 +150,12 @@ main(int argc, char **argv)
 				handleeuc = 1;
 				widecio = 0;
 				break;
+			case 'i':
+				caseless = TRUE;
+				break;
 			default:
 				fprintf(stderr,
-				"Usage: lex [-ewctvnV] [-o outfile] [-Q(y/n)] [file]\n");
+				"Usage: lex [-eiwctvnV] [-o outfile] [-Q(y/n)] [file]\n");
 				exit(1);
 		}
 	}
@@ -172,6 +176,13 @@ main(int argc, char **argv)
 		}
 	} else
 		fin = stdin;
+        if(!fout) {
+                fout = fopen(fnout, "w");
+                if (!fout)
+                        error(
+                        "lex: could not open %s for writing",
+                        fnout);
+        }
 
 	/* may be gotten: def, subs, sname, schar, ccl, dchar */
 	gch();

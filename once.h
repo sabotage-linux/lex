@@ -158,6 +158,7 @@ CHR *psave;
 
 Boolean handleeuc = FALSE;
 Boolean widecio = FALSE;
+Boolean caseless = FALSE;
 
 int	isArray = 1;	/* XCU4: for %array %pointer */
 

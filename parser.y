@@ -132,7 +132,7 @@ defns:	defns STR STR
 			error("Too many definitions");
 		dp += slength($3.cp) + 1;
 		if(dp >= dchar+DEFCHAR)
-			error("Definitions too long");
+			error("Definitions too long (%d)", DEFCHAR);
 		subs[dptr]=def[dptr]=0;	/* for lookup - require ending null */
 	}
 	|
@@ -316,13 +316,19 @@ static int wcwordtos(CHR *ws, char *buf, size_t buflen) {
 static void flex_noyywrap(void) {
 	fprintf(fout, "# define yywrap() 1\n");
 }
+static void flex_caseless(void) {
+	fprintf(fout, "# define LEXCASELESS 1\n");
+	fprintf(fout, "#include <ctype.h>\n");
+	caseless = TRUE;
+}
 static void parse_flex_opts(CHR *p) {
 	static const struct {
-		const char name[9];
+		const char *name;
 		void(*action)(void);
 	} flex_opts[] = {
 		{ "noyywrap", flex_noyywrap},
-		{ {0}, 0 }
+		{ "case-insensitive", flex_caseless},
+		{ 0, 0 }
 	};
 	while(1) {
 		char buf[60+MB_LEN_MAX];
@@ -795,6 +801,7 @@ start:
 				if(prev != '\n')  /* not at line begin, not start */
 					goto character;
 				t = slptr;
+                                x = 0;
 				do {
 					i = 0;
 					if(!isascii(c = gch()))
@@ -857,7 +864,7 @@ start:
 				while((c=gch()) && c != '"' && c != '\n'){
 					if(c == '\\') c = usescape(c=gch());
 					remch(c);
-					token[i++] = c;
+					token[i++] = caseless ? tolower(c) : c;
 					if(i >= TOKENSIZE){
 						warning("String too long");
 						i = TOKENSIZE-1;
@@ -923,8 +930,8 @@ Character range specified between different codesets.");
 						     	     ('0'<=j && k<='9')))
 								warning("Non-portable Character Class");
 							token[i++] = RANGE;
-							token[i++] = j;
-							token[i++] = k;
+							token[i++] = caseless ? tolower(j) : j;
+							token[i++] = caseless ? tolower(k) : k;
 							light = FALSE;
 						} else {
 							error("unmatched hyphen");
@@ -935,7 +942,7 @@ Character range specified between different codesets.");
 					} else {
 						j = c;
 						remch(c);
-						token[i++] = c; /* Remember whatever.*/
+						token[i++] = caseless ? tolower(c) : c; /* Remember whatever.*/
 						light = TRUE;
 						ESCAPE = FALSE;
 					}
@@ -969,9 +976,10 @@ Character range specified between different codesets.");
 				if(alpha(peek)){
 					i = 0;
 					yylval.cp = (CHR *)token;
-					token[i++] = c;
+					token[i++] = caseless ? tolower(c) : c;
 					while(alpha(peek)) {
-						remch(token[i++] = gch());
+                                                c = gch();
+						remch(token[i++] = caseless ? tolower(c) : c);
 						if(i >= TOKENSIZE) {
 							warning("string too long");
 							i = TOKENSIZE - 1;
