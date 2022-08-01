@@ -94,11 +94,11 @@ main(int argc, char **argv)
 	sargc = argc;
 	errorf = stderr;
 	setlocale(LC_CTYPE, "");
+	while ((c = getopt(argc, argv,
 #ifdef DEBUG
-	while ((c = getopt(argc, argv, "dyctvnewVQ:o:")) != EOF) {
-#else
-	while ((c = getopt(argc, argv, "ctvneiwVQ:o:")) != EOF) {
+                "dy"
 #endif
+                "ctvneiwVQ:o:")) != EOF) {
 		switch (c) {
 #ifdef DEBUG
 			case 'd':
