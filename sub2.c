@@ -699,6 +699,8 @@ packtrans(int st, CHR *tch, int *tst, int cnt, int tryit)
 #endif
 nopack:
 	/* stick it in */
+                if((nptr+cnt) > ntrans)
+                    goto errntrans;
 		gotof[st] = nptr;
 		nexts[nptr] = cnt;
 		for (i = 0; i < cnt; i++) {
@@ -713,10 +715,12 @@ nopack:
 		gotof[st] = -1;
 		nptr--;
 	} else
-		if (nptr > ntrans)
+		if (nptr > ntrans) {
+errntrans:
 			error(
 			"Too many transitions (%d) %s", ntrans,
 			(ntrans == NTRANS ? "\nTry using %a num" : ""));
+                }
 }
 
 #ifdef DEBUG
