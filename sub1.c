@@ -674,13 +674,10 @@ gch(void)
 int
 mn2(int a, intptr_t d, intptr_t c)
 {
-	if (tptr >= treesize) {
+	if (tptr >= treesize || d >= treesize || c >= treesize) {
 		tptr++;
 		error("Parse tree too big (%d) %s", treesize,
 			(treesize == TREESIZE ? "\nTry using %e num" : ""));
-	}
-	if (d >= treesize) {
-		error("Parse error");
 	}
 	name[tptr] = a;
 	left[tptr] = d;
