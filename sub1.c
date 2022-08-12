@@ -41,6 +41,11 @@
 #include <ctype.h>
 #include <stdarg.h>
 
+static int isnl(int c)
+{
+	return c == '\r' || c == '\n';
+}
+
 /*
  * return next line of input, throw away trailing '\n'
  * and also throw away trailing blanks (spaces and tabs)
@@ -55,7 +60,7 @@ getl(CHR *p)
 	int blank = 0;
 
 	t = s = p;
-	while (((c = gch()) != 0) && c != '\n') {
+	while (((c = gch()) != 0) && !isnl(c)) {
 		if (t >= &p[BUF_SIZ])
 			error("definitions too long");
 		if (c == ' ' || c == '\t') {
