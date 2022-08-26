@@ -75,7 +75,7 @@ int main(int argc, char** argv) {
 		default: usage();
 	}
 	unsigned cpl = 77;
-	FILE *f = fopen(argv[f_arg], "r");
+	FILE *f = fopen(argv[f_arg], "rb");
 	if(!f) { perror("fopen"); return 1; }
 	if(!skip_header(f)) {
 		fprintf(stderr, "error: form start marker %s not found!\n", "START_INCLUDE");
