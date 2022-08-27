@@ -79,15 +79,16 @@ extern unsigned char yytext[];
 extern int yyleng;
 #endif
 
-#if defined(__cplusplus) || defined(__STDC__)
-extern int	yyback(int *, int);
-extern int	YYINPUT(void);
-extern void	YYUNPUT(int);
 #ifdef EUC
 	static int	yyracc(int);
 #else
 	extern int	yyracc(int);
 #endif
+
+#if defined(__cplusplus) || defined(__STDC__)
+extern int	yyback(int *, int);
+extern int	YYINPUT(void);
+extern void	YYUNPUT(int);
 #ifdef EOPTION
 	extern size_t	wcstombs(char *, const wchar_t *, size_t);
 #endif
@@ -132,15 +133,11 @@ YYREJECT()
 	return (-1);
 }
 
-#ifdef	EUC
+#ifdef EUC
 static
 #endif
-#if defined(__cplusplus) || defined(__STDC__)
 int
 yyracc(int m)
-#else
-yyracc(m)
-#endif
 {
 	yyolsp = yylsp;
 	if (yyextra[m]) {

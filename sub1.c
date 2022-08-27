@@ -41,6 +41,11 @@
 #include <ctype.h>
 #include <stdarg.h>
 
+static int isnl(int c)
+{
+	return c == '\r' || c == '\n';
+}
+
 /*
  * return next line of input, throw away trailing '\n'
  * and also throw away trailing blanks (spaces and tabs)
@@ -55,7 +60,7 @@ getl(CHR *p)
 	int blank = 0;
 
 	t = s = p;
-	while (((c = gch()) != 0) && c != '\n') {
+	while (((c = gch()) != 0) && !isnl(c)) {
 		if (t >= &p[BUF_SIZ])
 			error("definitions too long");
 		if (c == ' ' || c == '\t') {
@@ -194,7 +199,7 @@ lgate(void)
 	lgatflg = 1;
 	if (fout == NULL) {
 		sprintf(fname, "lex.yy.%c", ratfor ? 'r' : 'c');
-		fout = fopen(fname, "w");
+		fout = fopen(fname, "wb");
 	}
 	if (fout == NULL)
 		error("Can't open %s", fname);
@@ -637,7 +642,7 @@ gch(void)
 	prev = pres;
 	c = pres = peek;
 	peek = pushptr > pushc ? *--pushptr : getwc(fin);
-	while (peek == EOF) {
+	while (peek == WEOF) {
 		if (no_input) {
 			if (!yyline)
 				error("Cannot read from -- %s",
@@ -646,7 +651,7 @@ gch(void)
 				yyline = 0;
 				if (fin != stdin)
 					fclose(fin);
-				fin = fopen(sargv[++optind], "r");
+				fin = fopen(sargv[++optind], "rb");
 				if (fin == NULL)
 					error("Cannot open file -- %s",
 					sargv[optind]);
@@ -662,7 +667,7 @@ gch(void)
 				break;
 		}
 	}
-	if (c == EOF) {
+	if (c == WEOF) {
 		eof = TRUE;
 		return (0);
 	}
