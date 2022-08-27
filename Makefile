@@ -21,18 +21,20 @@ INSTALL = install
 
 HOSTCC = $(CC)
 
+-include config.mak
+
 .c.o: ; $(CC) -c $(CFLAGS) $(CPPFLAGS) $(WARN) $<
 .y.c: ; $(YACC) -o $@ $<
 
-all: lex libl.a
+all: lex$(EXE_EXT) libl.a
 
-form2hdr: form2hdr.c
+form2hdr$(EXE_EXT): form2hdr.c
 	$(HOSTCC) $(HOSTCFLAGS) form2hdr.c -o $@
 
-$(GENH): %.h: % ; ./form2hdr -c $< > $@
+$(GENH): %.h: % ; $(HOSTRUN) ./form2hdr$(EXE_EXT) -c $< > $@
 
-lex: $(XOBJ)
-	$(CC) $(LDFLAGS) $(XOBJ) $(LIBS) -o lex
+lex$(EXE_EXT): $(XOBJ)
+	$(CC) $(LDFLAGS) $(XOBJ) $(LIBS) -o $@
 
 libl.a: $(LOBJ)
 	rm -f $@
@@ -60,7 +62,7 @@ install: lex lex.1 libl.a
 	$(INSTALL) -D -m 644 lex.1 $(DESTDIR)$(MANDIR)/man1/lex.1
 
 clean:
-	rm -f lex libl.a $(XOBJ) $(LOBJ) $(GENH) parser.c form2hdr core log *~
+	rm -f lex libl.a $(XOBJ) $(LOBJ) $(GENH) parser.c form2hdr$(EXE_EXT) core log *~
 
 mrproper: clean
 
@@ -77,7 +79,7 @@ yyless.o: yyless.c
 yywrap.o: yywrap.c
 lsearch.o: search.h
 wcio.o: ldefs.h
-$(GENH): form2hdr
+$(GENH): form2hdr$(EXE_EXT)
 
 .PHONY: all clean mrproper install
 # prevent GNU make from deleting parser.c after "all" finishes
