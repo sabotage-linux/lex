@@ -1,5 +1,13 @@
 /* (C) 2019 rofl0r */
 /* released into the public domain, or at your choice 0BSD or WTFPL */
+
+#ifdef __POCC__
+/* pelles C fails to use string literal as unsigned char[] destination... */
+#define SIMPLE_OUTPUT
+/* required to get fmemopen() prototype from stdio.h */
+#define __STDC_WANT_LIB_EXT2__ 1
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -100,19 +108,21 @@ int main(int argc, char** argv) {
 			{ FILE *foo = fopen("debug", "w"); fwrite(outb, 1, outsize, foo); fclose(foo); }
 #endif
 			fclose(f);
-			f = fmemopen(outb, outsize, "r");
+			f = fmemopen(outb, outsize, "rb");
 		}
 
 		char *p = strrchr(argv[f_arg], '/');
 		if(!p) p = argv[f_arg];
 		else p++;
 		printf( "const struct { unsigned clen, ulen;\n"
-			"const unsigned char data[]; } %s = { %zu, %zu,\n",
-			p, outsize, insize);
+			"const unsigned char data[%zu]; } %s = { %zu, %zu,\n",
+			outsize, p, outsize, insize);
 	}
 
 	int ch, dirty;
 	unsigned cnt = 0;
+
+#ifndef SIMPLE_OUTPUT
 	while((ch = fgetc(f)) != EOF) {
 		if(cnt == 0) { printf("\""); dirty = 0; }
 		char buf[5];
@@ -132,7 +142,17 @@ int main(int argc, char** argv) {
 		}
 	}
 	if(cnt) printf("\"\n");
+#else
+	printf("{\n");
+	while((ch = fgetc(f)) != EOF) {
+		++cnt;
+		printf("%u,", ch);
+		if(cnt % cpl == 0) printf("\n");
+	}
+	printf("}\n");
+#endif
 	printf("};\n");
+
 	fclose(f);
 	return 0;
 }
