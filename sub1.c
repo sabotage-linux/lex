@@ -199,7 +199,7 @@ lgate(void)
 	lgatflg = 1;
 	if (fout == NULL) {
 		sprintf(fname, "lex.yy.%c", ratfor ? 'r' : 'c');
-		fout = fopen(fname, "w");
+		fout = fopen(fname, "wb");
 	}
 	if (fout == NULL)
 		error("Can't open %s", fname);
@@ -651,7 +651,7 @@ gch(void)
 				yyline = 0;
 				if (fin != stdin)
 					fclose(fin);
-				fin = fopen(sargv[++optind], "r");
+				fin = fopen(sargv[++optind], "rb");
 				if (fin == NULL)
 					error("Cannot open file -- %s",
 					sargv[optind]);

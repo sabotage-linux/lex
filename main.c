@@ -117,7 +117,7 @@ main(int argc, char **argv)
 					"lex: -Q should be followed by [y/n]");
 				break;
 			case 'o':
-				fout = fopen(optarg, "w");
+				fout = fopen(optarg, "wb");
 				if (!fout)
 					error(
 					"lex: could not open %s for writing",
@@ -165,7 +165,7 @@ main(int argc, char **argv)
 		if (strcmp(argv[optind], "-") == 0)
 			fin = stdin;
 		else {
-			fin = fopen(argv[optind], "r");
+			fin = fopen(argv[optind], "rb");
 			if (fin == NULL)
 				error(
 				"Can't open input file -- %s", argv[optind]);
