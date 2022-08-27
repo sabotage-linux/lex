@@ -642,7 +642,7 @@ gch(void)
 	prev = pres;
 	c = pres = peek;
 	peek = pushptr > pushc ? *--pushptr : getwc(fin);
-	while (peek == EOF) {
+	while (peek == WEOF) {
 		if (no_input) {
 			if (!yyline)
 				error("Cannot read from -- %s",
@@ -667,7 +667,7 @@ gch(void)
 				break;
 		}
 	}
-	if (c == EOF) {
+	if (c == WEOF) {
 		eof = TRUE;
 		return (0);
 	}
